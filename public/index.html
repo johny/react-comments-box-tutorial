@@ -31,11 +31,23 @@
         render: function() {
           return (
             <div className="comment-box__list">
-              Hello world, I am a comment list!
+              <Comment author="John Doe">This is a comment from John</Comment>
+              <Comment author="Susan Brown">Yet another comment, by Susan...</Comment>
             </div>
           );
         }
       });
+
+      var Comment = React.createClass({
+        render: function() {
+          return (
+            <div className="comment">
+              <span className="comment__author">{this.props.author}</span>
+              {this.props.children}
+            </div>
+          );
+        }
+      })
 
       var CommentForm = React.createClass({
         render: function() {
