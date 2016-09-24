@@ -15,17 +15,31 @@
     <div id="content"></div>
     <script type="text/babel">
 
-      var commentsData = [
-        {id: 1, author: "Pete Hunt", text: "This is one comment"},
-        {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
-      ];
-
       var CommentBox = React.createClass({
+
+        getInitialState: function() {
+          return {
+            data: []
+          }
+        },
+
+        componentDidMount: function() {
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false
+          }).done(function(data){
+            this.setState({data: data});
+          }.bind(this)).fail(function(xhr, status, error) {
+            console.log('Error fetching data:', error.toString());
+          }.bind(this));
+        },
+
         render: function() {
           return (
             <div className="comment-box">
               <h1>Comments!</h1>
-              <CommentList data={this.props.data} />
+              <CommentList data={this.state.data} />
               <CommentForm />
             </div>
           );
@@ -80,7 +94,7 @@
       })
 
       ReactDOM.render(
-        <CommentBox data={commentsData} />,
+        <CommentBox url="/api/comments" />,
         document.getElementById('content')
       );
 
