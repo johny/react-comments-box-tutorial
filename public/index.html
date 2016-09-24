@@ -15,12 +15,17 @@
     <div id="content"></div>
     <script type="text/babel">
 
+      var commentsData = [
+        {id: 1, author: "Pete Hunt", text: "This is one comment"},
+        {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+      ];
+
       var CommentBox = React.createClass({
         render: function() {
           return (
             <div className="comment-box">
               <h1>Comments!</h1>
-              <CommentList />
+              <CommentList data={this.props.data} />
               <CommentForm />
             </div>
           );
@@ -29,10 +34,18 @@
 
       var CommentList = React.createClass({
         render: function() {
+
+          var commentsNodes = this.props.data.map(function(comment){
+            return (
+              <Comment author={comment.author} key={comment.id}>
+                {comment.text}
+              </Comment>
+            )
+          });
+
           return (
             <div className="comment-box__list">
-              <Comment author="John Doe">This is a comment from John</Comment>
-              <Comment author="Susan Brown">Yet *another* comment, by Susan...</Comment>
+              {commentsNodes}
             </div>
           );
         }
@@ -67,7 +80,7 @@
       })
 
       ReactDOM.render(
-        <CommentBox />,
+        <CommentBox data={commentsData} />,
         document.getElementById('content')
       );
 
