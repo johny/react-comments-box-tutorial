@@ -32,18 +32,25 @@
           return (
             <div className="comment-box__list">
               <Comment author="John Doe">This is a comment from John</Comment>
-              <Comment author="Susan Brown">Yet another comment, by Susan...</Comment>
+              <Comment author="Susan Brown">Yet *another* comment, by Susan...</Comment>
             </div>
           );
         }
       });
 
       var Comment = React.createClass({
+
+        rawCommentBody: function() {
+          var md = new Remarkable();
+          var rawMakup = md.render(this.props.children.toString());
+          return { __html: rawMakup};
+        },
+
         render: function() {
           return (
             <div className="comment">
-              <span className="comment__author">{this.props.author}</span>
-              {this.props.children}
+              <strong className="comment__author">{this.props.author}:</strong>
+              <div dangerouslySetInnerHTML={this.rawCommentBody()}></div>
             </div>
           );
         }
