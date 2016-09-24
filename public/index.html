@@ -23,7 +23,7 @@
           }
         },
 
-        componentDidMount: function() {
+        fetchCommentsData: function() {
           $.ajax({
             url: this.props.url,
             dataType: 'json',
@@ -33,6 +33,11 @@
           }.bind(this)).fail(function(xhr, status, error) {
             console.log('Error fetching data:', error.toString());
           }.bind(this));
+        },
+
+        componentDidMount: function() {
+          this.fetchCommentsData();
+          window.setInterval(this.fetchCommentsData, this.props.poolingInterval)
         },
 
         render: function() {
@@ -94,7 +99,7 @@
       })
 
       ReactDOM.render(
-        <CommentBox url="/api/comments" />,
+        <CommentBox url="/api/comments" poolingInterval={1000} />,
         document.getElementById('content')
       );
 
